@@ -48,13 +48,13 @@ void view_setmousemovecallback(view *v, view_mousecallback cbk) {
 }
 
 void view_mousedown(view *v, int x, int y) {
-     if (v->mousedowncbk) v->mousedowncbk(v->cbkarg, x, y);
+     if (v->mousedowncbk) v->mousedowncbk(v->cbkarg, x, y, 0, 0, 0);
 }
 
 void view_mouseup(view *v, int x, int y) {
-     if (v->mouseupcbk) v->mouseupcbk(v->cbkarg, x, y);
+     if (v->mouseupcbk) v->mouseupcbk(v->cbkarg, x, y, 0, 0, 0);
 }
 
-void view_mousemove(view *v, int x, int y) {
-     if (v->mousemovecbk) v->mousemovecbk(v->cbkarg, x, y);
+void view_mousemove(view *v, int x, int y, int dx, int dy, int screenh) {
+     if (v->mousemovecbk) v->mousemovecbk(v->cbkarg, x, y, dx, dy, screenh);
 }

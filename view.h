@@ -4,7 +4,8 @@
 #include <SDL/SDL.h>
 
 typedef void (*view_drawcallback)(void *arg, SDL_Surface *screen);
-typedef void (*view_mousecallback)(void *arg, int x, int y);
+typedef void (*view_mousecallback)(void *arg, int x, int y,
+				   int dx, int dy, int screenh);
 
 typedef struct view_s view;
 struct view_s {
@@ -29,6 +30,6 @@ void view_setmouseupcallback(view *v, view_mousecallback cbk);
 void view_setmousemovecallback(view *v, view_mousecallback cbk);
 void view_mousedown(view *v, int x, int y);
 void view_mouseup(view *v, int x, int y);
-void view_mousemove(view *v, int x, int y);
+void view_mousemove(view *v, int x, int y, int dx, int dy, int screenh);
 
 #endif

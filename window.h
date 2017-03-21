@@ -33,6 +33,6 @@ void window_clearupdate(window *w);
 view* window_viewat(window *w, int x, int y);
 void window_mousedown(window *w, int x, int y);
 void window_mouseup(window *w, int x, int y);
-void window_mousemove(window *w, int x, int y);
+void window_mousemove(window *w, int x, int y, int dx, int dy);
 
 #endif

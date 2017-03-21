@@ -108,7 +108,7 @@ void window_events(window *w) {
 	  } else if (event.type == SDL_MOUSEMOTION) {
 	       int x = event.motion.x;
 	       int y = event.motion.y;
-	       window_mousemove(w, x, y);
+	       window_mousemove(w, x, y, event.motion.xrel, event.motion.yrel);
 	  }
      }
 }
@@ -137,10 +137,10 @@ void window_mouseup(window *w, int x, int y) {
      view_mouseup(v, x, y);
 }
 
-void window_mousemove(window *w, int x, int y) {
+void window_mousemove(window *w, int x, int y, int dx, int dy) {
      view *v = window_viewat(w, x, y);
      if (!v) return;
-     view_mousemove(v, x, y);
+     view_mousemove(v, x, y, dx, dy, w->screen->h);
 }
 
 void window_addview(window *w, view *v) {

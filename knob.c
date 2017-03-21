@@ -22,25 +22,24 @@ knob* knob_create(const char *label) {
      return k;
 }
 
-void knob_mousedown(void *arg, int x, int y) {
+void knob_mousedown(void *arg, int x, int y, int dx, int dy, int screenh) {
      printf("knob mousedown %d, %d\n", x, y);
      knob *k = arg;
      k->v->capturemouse = 1;
      k->mousedowny = y;
 }
 
-void knob_mouseup(void *arg, int x, int y) {
+void knob_mouseup(void *arg, int x, int y, int dx, int dy, int screenh) {
      printf("knob mouseup %d, %d\n", x, y);
      knob *k = arg;
      k->v->capturemouse = 0;
 }
 
-void knob_mousemove(void *arg, int x, int y) {
+void knob_mousemove(void *arg, int x, int y, int dx, int dy, int screenh) {
      printf("knob mousemove %d, %d\n", x, y);
      knob *k = arg;
      if (k->v->capturemouse) {
-	  int dy = -1 * (y - k->mousedowny);
-	  double d = (double)dy / 600.0;
+	  double d = (double)dy / (double)screenh * -1.0;
 	  k->val = k->val + d * (k->max - k->min);
 	  if (k->val > k->max) k->val = k->max;
 	  else if (k->val < k->min) k->val = k->min;
@@ -89,8 +88,8 @@ void knob_draw(void *arg, SDL_Surface *screen) {
      ellipseRGBA(screen, cx, cy,
 		 rad, rad, 255, 100, 100, 255);
 
-     int end = (k->val - k->min) / (k->max - k->min) * 365;
-     int q = 365 / 4;
+     int end = (k->val - k->min) / (k->max - k->min) * 359;
+     int q = 359 / 4;
      filledPieRGBA(screen, cx, cy, rad, q, end + q,
 		   100, 255, 100, 255);
 
@@ -135,7 +134,7 @@ void knob_free(knob *k) {
      free(k);
 }
 
-void knob_setcallback(knob *k, void *arg, knob_callback *cbk) {
+void knob_setcallback(knob *k, void *arg, knob_callback cbk) {
      k->callback = cbk;
      k->cbkarg = arg;
 }
