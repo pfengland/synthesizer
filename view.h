@@ -15,6 +15,7 @@ struct view_s {
      view_mousecallback mouseupcbk;
      view_mousecallback mousemovecbk;
      void *cbkarg;
+     int capturemouse;
 };
 
 view *view_create(void);

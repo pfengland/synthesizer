@@ -10,6 +10,7 @@ view *view_create(void) {
      v->update = 0;
      v->drawcbk = NULL;
      v->cbkarg = NULL;
+     v->capturemouse = 0;
      return v;
 }
 

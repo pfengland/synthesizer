@@ -9,8 +9,14 @@ synthwindow* synthwindow_create(synth *s) {
      knob_setvalue(sw->freqnob, sw->s->freq);
      knob_setmin(sw->freqnob, synth_minfreq);
      knob_setmax(sw->freqnob, synth_maxfreq);
+     knob_setcallback(sw->freqnob, sw, synthwindow_freqchanged);
      window_addview(sw->w, sw->freqnob->v);
      return sw;
+}
+
+void synthwindow_freqchanged(void *arg, double value) {
+     synthwindow *sw = arg;
+     sw->s->freq = value;
 }
 
 void synthwindow_free(synthwindow *sw) {

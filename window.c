@@ -80,7 +80,6 @@ void window_clearupdate(window *w) {
      for (int i=0; i<viewlist_count(w->views); i++) {
 	  view_setupdate(viewlist_at(w->views, i), 0);
      }
-     return 0;
 }
 
 void window_events(window *w) {
@@ -117,8 +116,8 @@ void window_events(window *w) {
 view* window_viewat(window *w, int x, int y) {
      for (int i=0; i<viewlist_count(w->views); i++) {
 	  view *v = viewlist_at(w->views, i);
-	  if (x >= v->x && x < v->x + v->w &&
-	      y >= v->y && y < v->y + v->h) {
+	  if (v->capturemouse || (x >= v->x && x < v->x + v->w &&
+	       y >= v->y && y < v->y + v->h)) {
 
 	       return v;
 	  }

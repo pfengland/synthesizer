@@ -3,6 +3,8 @@
 
 #include "view.h"
 
+typedef void (*knob_callback)(void *arg, double val);
+
 typedef struct knob_s knob;
 struct knob_s {
      double val;
@@ -10,6 +12,9 @@ struct knob_s {
      double min;
      view *v;
      const char *label;
+     int mousedowny;
+     void *cbkarg;
+     knob_callback callback;
 };
 
 knob* knob_create(const char *label);
@@ -21,5 +26,6 @@ void knob_draw(void *arg, SDL_Surface *screen);
 void knob_mousedown(void *arg, int x, int y);
 void knob_mouseup(void *arg, int x, int y);
 void knob_mousemove(void *arg, int x, int y);
+void knob_setcallback(knob *k, void *arg, knob_callback *cbk);
 
 #endif

@@ -16,5 +16,6 @@ synthwindow* synthwindow_create(synth *s);
 void synthwindow_free(synthwindow *sw);
 void synthwindow_loop(synthwindow *sw);
 int synthwindow_quit(synthwindow *sw);
-
+void synthwindow_freqchanged(void *arg, double value);
+     
 #endif
