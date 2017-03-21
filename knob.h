@@ -9,9 +9,10 @@ struct knob_s {
      double max;
      double min;
      view *v;
+     const char *label;
 };
 
-knob* knob_create(void);
+knob* knob_create(const char *label);
 void knob_setvalue(knob *k, double v);
 void knob_setmin(knob *k, double min);
 void knob_setmax(knob *k, double max);

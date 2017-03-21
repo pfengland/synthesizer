@@ -5,7 +5,7 @@ synthwindow* synthwindow_create(synth *s) {
      synthwindow *sw = malloc(sizeof(*sw));
      sw->w = window_create("synthesizer");
      sw->s = s;
-     sw->freqnob = knob_create();
+     sw->freqnob = knob_create("freq");
      knob_setvalue(sw->freqnob, sw->s->freq);
      knob_setmin(sw->freqnob, synth_minfreq);
      knob_setmax(sw->freqnob, synth_maxfreq);
