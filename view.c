@@ -21,12 +21,39 @@ void view_setupdate(view *v, int update) {
      v->update = update;
 }
 
-void view_setdrawcallback(view *v, view_drawcallback cbk, void *arg) {
+void view_setdrawcallback(view *v, view_drawcallback cbk) {
      v->drawcbk = cbk;
-     v->cbkarg = arg;
 }
 
 void view_draw(view *v, SDL_Surface *screen) {
      if (!v->drawcbk) return;
      v->drawcbk(v->cbkarg, screen);
+}
+
+void view_setcallbackarg(view *v, void *arg) {
+     v->cbkarg = arg;
+}
+
+void view_setmousedowncallback(view *v, view_mousecallback cbk) {
+     v->mousedowncbk = cbk;
+}
+
+void view_setmouseupcallback(view *v, view_mousecallback cbk) {
+     v->mouseupcbk = cbk;
+}
+
+void view_setmousemovecallback(view *v, view_mousecallback cbk) {
+     v->mousemovecbk = cbk;
+}
+
+void view_mousedown(view *v, int x, int y) {
+     if (v->mousedowncbk) v->mousedowncbk(v->cbkarg, x, y);
+}
+
+void view_mouseup(view *v, int x, int y) {
+     if (v->mouseupcbk) v->mouseupcbk(v->cbkarg, x, y);
+}
+
+void view_mousemove(view *v, int x, int y) {
+     if (v->mousemovecbk) v->mousemovecbk(v->cbkarg, x, y);
 }

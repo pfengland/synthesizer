@@ -101,14 +101,47 @@ void window_events(window *w) {
 	  } else if (event.type == SDL_MOUSEBUTTONDOWN) {
 	       int x = event.button.x;
 	       int y = event.button.y;
+	       window_mousedown(w, x, y);
 	  } else if (event.type == SDL_MOUSEBUTTONUP) {
 	       int x = event.button.x;
 	       int y = event.button.y;
+	       window_mouseup(w, x, y);
 	  } else if (event.type == SDL_MOUSEMOTION) {
 	       int x = event.motion.x;
 	       int y = event.motion.y;
+	       window_mousemove(w, x, y);
 	  }
      }
+}
+
+view* window_viewat(window *w, int x, int y) {
+     for (int i=0; i<viewlist_count(w->views); i++) {
+	  view *v = viewlist_at(w->views, i);
+	  if (x >= v->x && x < v->x + v->w &&
+	      y >= v->y && y < v->y + v->h) {
+
+	       return v;
+	  }
+     }
+     return NULL;
+}
+
+void window_mousedown(window *w, int x, int y) {
+     view *v = window_viewat(w, x, y);
+     if (!v) return;
+     view_mousedown(v, x, y);
+}
+
+void window_mouseup(window *w, int x, int y) {
+     view *v = window_viewat(w, x, y);
+     if (!v) return;
+     view_mouseup(v, x, y);
+}
+
+void window_mousemove(window *w, int x, int y) {
+     view *v = window_viewat(w, x, y);
+     if (!v) return;
+     view_mousemove(v, x, y);
 }
 
 void window_addview(window *w, view *v) {

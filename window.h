@@ -30,5 +30,9 @@ void window_update(window *w);
 int window_quit(window *w);
 int window_needupdate(window *w);
 void window_clearupdate(window *w);
+view* window_viewat(window *w, int x, int y);
+void window_mousedown(window *w, int x, int y);
+void window_mouseup(window *w, int x, int y);
+void window_mousemove(window *w, int x, int y);
 
 #endif

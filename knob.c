@@ -13,8 +13,24 @@ knob* knob_create(const char *label) {
      k->v->h = 100;
      k->label = label;
      view_setupdate(k->v, 1);
-     view_setdrawcallback(k->v, knob_draw, k);
+     view_setcallbackarg(k->v, k);
+     view_setdrawcallback(k->v, knob_draw);
+     view_setmousedowncallback(k->v, knob_mousedown);
+     view_setmouseupcallback(k->v, knob_mouseup);
+     view_setmousemovecallback(k->v, knob_mousemove);
      return k;
+}
+
+void knob_mousedown(void *arg, int x, int y) {
+     printf("knob mousedown %d, %d\n", x, y);
+}
+
+void knob_mouseup(void *arg, int x, int y) {
+     printf("knob mouseup %d, %d\n", x, y);
+}
+
+void knob_mousemove(void *arg, int x, int y) {
+     printf("knob mousemove %d, %d\n", x, y);
 }
 
 void knob_draw(void *arg, SDL_Surface *screen) {
