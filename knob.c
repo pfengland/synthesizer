@@ -45,6 +45,7 @@ void knob_mousemove(void *arg, int x, int y, int dx, int dy, int screenh) {
 	  else if (k->val < k->min) k->val = k->min;
 	  printf("knob value set to %f\n", k->val);
 	  k->v->update = 1;
+	  if (k->callback) k->callback(k->cbkarg, k->val);
      }
 }
 

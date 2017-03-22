@@ -16,7 +16,7 @@ synthwindow* synthwindow_create(synth *s) {
 
 void synthwindow_freqchanged(void *arg, double value) {
      synthwindow *sw = arg;
-     sw->s->freq = value;
+     synth_setfreq(sw->s, value);
 }
 
 void synthwindow_free(synthwindow *sw) {

@@ -7,7 +7,8 @@
 
 #define audioclient_ringbuffer_size 16384
 
-typedef void (*process_callback_t)(void *arg, jack_nframes_t nframes,
+typedef void (*process_callback_t)(void *arg, int samplerate,
+				   jack_nframes_t nframes,
 				   jack_default_audio_sample_t *in,
 				   jack_default_audio_sample_t *out1,
 				   jack_default_audio_sample_t *out2);
@@ -24,6 +25,7 @@ struct audioclient_s {
      int capture_start;
      int capture_stop;
      int capture_data;
+     int samplerate;
      process_callback_t process_callback;
      void *callback_arg;
 };

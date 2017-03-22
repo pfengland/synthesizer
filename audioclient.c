@@ -56,7 +56,8 @@ int audioclient_process(jack_nframes_t nframes, void *client) {
 
     // call callback to get playback data
     if (c->process_callback) {
-	 c->process_callback(c->callback_arg, nframes, in, out1, out2);
+	 c->process_callback(c->callback_arg, c->samplerate,
+			     nframes, in, out1, out2);
     } else {
 	 for (int i=0; i<nframes; i++) {
 	      out1[i] = 0;
@@ -126,6 +127,8 @@ void audioclient_init(audioclient *c) {
 
     jack_set_process_callback(c->client, audioclient_process, c);
     jack_on_shutdown(c->client, audioclient_shutdown, NULL);
+
+    c->samplerate = jack_get_sample_rate(c->client);
 
     c->ringbuffer = jack_ringbuffer_create(sizeof(double) *
 					   audioclient_ringbuffer_size);

@@ -4,11 +4,23 @@
 synthesizer* synthesizer_create(void) {
      synthesizer *s = malloc(sizeof(*s));
      s->audio = audioclient_create();
+     audioclient_set_process_callback(s->audio, synthesizer_process, s);
      s->midi = midiclient_create();
      s->s = synth_create();
      s->sw = synthwindow_create(s->s);
      return s;
 }
+
+void synthesizer_process(void *arg, int samplerate,
+			 jack_nframes_t nframes,
+			 jack_default_audio_sample_t *in,
+			 jack_default_audio_sample_t *out1,
+			 jack_default_audio_sample_t *out2) {
+     synthesizer *s = arg;
+     synth_process(s->s, samplerate, nframes, out1);
+     for (int i=0; i<nframes; i++) out2[i] = out1[i];
+}
+
 
 void synthesizer_init(synthesizer *s) {
      audioclient_init(s->audio);

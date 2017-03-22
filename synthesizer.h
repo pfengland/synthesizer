@@ -20,5 +20,10 @@ void synthesizer_init(synthesizer *s);
 void synthesizer_stop(synthesizer *s);
 void synthesizer_loop(synthesizer *s);
 int synthesizer_quit(synthesizer *s);
+void synthesizer_process(void *arg, int samplerate,
+			 jack_nframes_t nframes,
+			 jack_default_audio_sample_t *in,
+			 jack_default_audio_sample_t *out1,
+			 jack_default_audio_sample_t *out2);
 
 #endif
