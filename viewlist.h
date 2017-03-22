@@ -2,7 +2,8 @@
 #define H_VIEWLIST
 
 #include "dynamicarray.h"
-#include "view.h"
+
+typedef struct view_s view;
 
 typedef struct viewlist_s viewlist;
 struct viewlist_s {

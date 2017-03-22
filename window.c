@@ -6,12 +6,11 @@
 window* window_create(const char *name) {
 
      window *w = malloc(sizeof(*w));
+     w->v = view_create();
+     view_setupdate(w->v, 1);
 
-     w->update = 1;
      w->quit = 0;
      w->framestart = 0;
-
-     w->views = viewlist_create();
 
      XInitThreads();
      SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER);
@@ -33,7 +32,7 @@ window* window_create(const char *name) {
 void window_free(window *w) {
      TTF_Quit();
      SDL_Quit();
-     viewlist_free(w->views, 0);
+     view_free(w->v);
      free(w);
 }
 
@@ -50,36 +49,21 @@ void window_update(window *w) {
 	  return;
      }
 
-     if (window_needupdate(w)) {
+     if (view_needupdate(w->v)) {
 
-	  window_clearupdate(w);
+	  view_clearupdate(w->v);
 
+	  // fill background
 	  SDL_FillRect(w->screen, NULL,
 		       SDL_MapRGB(w->screen->format, 0,100,100));
 
-	  for (int i=0; i<viewlist_count(w->views); i++) {
-	       view_draw(viewlist_at(w->views, i), w->screen);
-	  }
+	  // draw child views
+	  view_draw(w->v, w->screen);
 
 	  SDL_Flip(w->screen);
 
 	  w->framestart = SDL_GetTicks();
      } 
-}
-
-int window_needupdate(window *w) {
-     if (w->update) return 1;
-     for (int i=0; i<viewlist_count(w->views); i++) {
-	  if (viewlist_at(w->views, i)->update) return 1;
-     }
-     return 0;
-}
-
-void window_clearupdate(window *w) {
-     w->update = 0;
-     for (int i=0; i<viewlist_count(w->views); i++) {
-	  view_setupdate(viewlist_at(w->views, i), 0);
-     }
 }
 
 void window_events(window *w) {
@@ -96,55 +80,22 @@ void window_events(window *w) {
 	       int opts = SDL_SWSURFACE|SDL_RESIZABLE;
 	       w->screen = SDL_SetVideoMode(event.resize.w, event.resize.h,
 					    32, opts);
-	       w->update = 1;
+	       view_setupdate(w->v, 1);
 	  } else if (event.type == SDL_MOUSEBUTTONDOWN) {
 	       int x = event.button.x;
 	       int y = event.button.y;
-	       window_mousedown(w, x, y);
+	       view_mousedown(w->v, x, y);
 	  } else if (event.type == SDL_MOUSEBUTTONUP) {
 	       int x = event.button.x;
 	       int y = event.button.y;
-	       window_mouseup(w, x, y);
+	       view_mouseup(w->v, x, y);
 	  } else if (event.type == SDL_MOUSEMOTION) {
 	       int x = event.motion.x;
 	       int y = event.motion.y;
-	       window_mousemove(w, x, y, event.motion.xrel, event.motion.yrel);
+	       view_mousemove(w->v, x, y, event.motion.xrel, event.motion.yrel,
+			      w->screen->h);
 	  }
      }
-}
-
-view* window_viewat(window *w, int x, int y) {
-     for (int i=0; i<viewlist_count(w->views); i++) {
-	  view *v = viewlist_at(w->views, i);
-	  if (v->capturemouse || (x >= v->x && x < v->x + v->w &&
-	       y >= v->y && y < v->y + v->h)) {
-
-	       return v;
-	  }
-     }
-     return NULL;
-}
-
-void window_mousedown(window *w, int x, int y) {
-     view *v = window_viewat(w, x, y);
-     if (!v) return;
-     view_mousedown(v, x, y);
-}
-
-void window_mouseup(window *w, int x, int y) {
-     view *v = window_viewat(w, x, y);
-     if (!v) return;
-     view_mouseup(v, x, y);
-}
-
-void window_mousemove(window *w, int x, int y, int dx, int dy) {
-     view *v = window_viewat(w, x, y);
-     if (!v) return;
-     view_mousemove(v, x, y, dx, dy, w->screen->h);
-}
-
-void window_addview(window *w, view *v) {
-     viewlist_add(w->views, v);
 }
 
 int window_quit(window *w) {

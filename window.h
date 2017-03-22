@@ -2,7 +2,7 @@
 #define H_WINDOW
 
 #include <SDL/SDL.h>
-#include "viewlist.h"
+#include "view.h"
 
 static const int window_frameRate = 30;
 // key repeat rate
@@ -15,24 +15,16 @@ static const int window_fps = 20;
 typedef struct window_s window;
 struct window_s {
      SDL_Surface *screen;
-     int update;
      int quit;
      int framestart;
-     viewlist *views;
+     view *v;
 };
 
 window* window_create(const char *name);
 void window_free(window *w);
-void window_addview(window *w, view *v);
 void window_loop(window *w);
 void window_events(window *w);
 void window_update(window *w);
 int window_quit(window *w);
-int window_needupdate(window *w);
-void window_clearupdate(window *w);
-view* window_viewat(window *w, int x, int y);
-void window_mousedown(window *w, int x, int y);
-void window_mouseup(window *w, int x, int y);
-void window_mousemove(window *w, int x, int y, int dx, int dy);
 
 #endif

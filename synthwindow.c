@@ -10,7 +10,7 @@ synthwindow* synthwindow_create(synth *s) {
      knob_setmin(sw->freqnob, synth_minfreq);
      knob_setmax(sw->freqnob, synth_maxfreq);
      knob_setcallback(sw->freqnob, sw, synthwindow_freqchanged);
-     window_addview(sw->w, sw->freqnob->v);
+     view_addview(sw->w->v, sw->freqnob->v);
      return sw;
 }
 

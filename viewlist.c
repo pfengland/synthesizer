@@ -1,4 +1,5 @@
 #include "viewlist.h"
+#include "view.h"
 #include <stdlib.h>
 
 viewlist* viewlist_create(void) {
