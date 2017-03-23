@@ -7,8 +7,13 @@ view *view_create(void) {
      v->y = 0;
      v->w = 0;
      v->h = 0;
+     v->expandh = 0;
+     v->expandv = 0;
      v->update = 0;
      v->drawcbk = NULL;
+     v->mousedowncbk = NULL;
+     v->mouseupcbk = NULL;
+     v->mousemovecbk = NULL;
      v->cbkarg = NULL;
      v->capturemouse = 0;
      v->views = viewlist_create();
@@ -27,7 +32,8 @@ void view_setupdate(view *v, int update) {
 int view_needupdate(view *v) {
      if (v->update) return 1;
      for (int i=0; i<viewlist_count(v->views); i++) {
-	  if (viewlist_at(v->views, i)->update) return 1;
+	  view *cv = viewlist_at(v->views, i);
+	  if (view_needupdate(cv)) return 1;
      }
      return 0;
 
@@ -100,8 +106,9 @@ view* view_viewat(view *v, int x, int y) {
      int count = viewlist_count(v->views); 
      for (int i=0; i<count; i++) {
 	  view *cv = viewlist_at(v->views, i);
-	  if (cv->capturemouse || (x >= cv->x && x < cv->x + cv->w &&
-	       y >= cv->y && y < cv->y + cv->h)) {
+	  if (cv->capturemouse ||
+	      ((cv->expandh || (x >= cv->x && x < cv->x + cv->w)) &&
+	       (cv->expandv || (y >= cv->y && y < cv->y + cv->h)))) {
 	       return cv;
 	  }
      }

@@ -11,6 +11,7 @@ typedef void (*view_mousecallback)(void *arg, int x, int y,
 typedef struct view_s view;
 struct view_s {
      int x, y, h, w;
+     int expandv, expandh;
      int update;
      view_drawcallback drawcbk;
      view_mousecallback mousedowncbk;

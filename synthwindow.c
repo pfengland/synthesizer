@@ -5,18 +5,9 @@ synthwindow* synthwindow_create(synth *s) {
      synthwindow *sw = malloc(sizeof(*sw));
      sw->w = window_create("synthesizer");
      sw->s = s;
-     sw->freqnob = knob_create("freq");
-     knob_setvalue(sw->freqnob, sw->s->freq);
-     knob_setmin(sw->freqnob, synth_minfreq);
-     knob_setmax(sw->freqnob, synth_maxfreq);
-     knob_setcallback(sw->freqnob, sw, synthwindow_freqchanged);
-     view_addview(sw->w->v, sw->freqnob->v);
+     sw->sv = synthview_create(s);
+     view_addview(sw->w->v, sw->sv->v);
      return sw;
-}
-
-void synthwindow_freqchanged(void *arg, double value) {
-     synthwindow *sw = arg;
-     synth_setfreq(sw->s, value);
 }
 
 void synthwindow_free(synthwindow *sw) {

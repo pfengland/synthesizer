@@ -26,7 +26,8 @@ void viewlist_free(viewlist *vl, int freeitems) {
 
 view* viewlist_at(viewlist *vl, int i) {
      if (vl->views->count <= i) return NULL;
-     return ((view**)vl->views->items)[i];
+     view *cv = ((view**)vl->views->items)[i];
+     return cv;
 }
 
 int viewlist_count(viewlist *vl) {
