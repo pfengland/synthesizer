@@ -25,5 +25,9 @@ void synthesizer_process(void *arg, int samplerate,
 			 jack_default_audio_sample_t *in,
 			 jack_default_audio_sample_t *out1,
 			 jack_default_audio_sample_t *out2);
+void synthesizer_noteon(void *arg, unsigned int num,
+				unsigned int val);
+void synthesizer_noteoff(void *arg, unsigned int num,
+				 unsigned int val);
 
 #endif

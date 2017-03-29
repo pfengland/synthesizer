@@ -2,13 +2,36 @@
 #include <stdlib.h>
 
 synthesizer* synthesizer_create(void) {
+
      synthesizer *s = malloc(sizeof(*s));
+
      s->audio = audioclient_create();
      audioclient_set_process_callback(s->audio, synthesizer_process, s);
+
      s->midi = midiclient_create();
+     midiclient_set_callback_arg(s->midi, s);
+     midiclient_set_noteon_callback(s->midi, synthesizer_noteon);
+     midiclient_set_noteoff_callback(s->midi, synthesizer_noteoff);
+     
      s->s = synth_create();
      s->sw = synthwindow_create(s->s);
+
      return s;
+}
+
+void synthesizer_noteon(void *arg, unsigned int num,
+				unsigned int val) {
+     synthesizer *s = arg;
+     printf("noteon: %d, %d\n", num, val);
+     synth_setnote(s->s, num);
+     synth_setgate(s->s, 1);
+}
+
+void synthesizer_noteoff(void *arg, unsigned int num,
+				unsigned int val) {
+     synthesizer *s = arg;     
+     printf("noteoff: %d\n", num);
+     synth_setgate(s->s, 0);
 }
 
 void synthesizer_process(void *arg, int samplerate,

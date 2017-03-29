@@ -8,6 +8,8 @@ midiclient* midiclient_create(void) {
      m->queueid = 0;
      m->stop = 0;
      m->cc_callback = NULL;
+     m->noteon_callback = NULL;
+     m->noteoff_callback = NULL;
      m->callback_arg = NULL;
      return m;
 }
@@ -67,6 +69,21 @@ void midiclient_read(midiclient *m) {
 	       if (m->cc_callback) {
 		    m->cc_callback(m->callback_arg, param, value);
 	       }
+	  } else if (ev->type == SND_SEQ_EVENT_NOTEON) {
+	       unsigned int note = ev->data.note.note;
+	       unsigned int veloc = ev->data.note.velocity;
+	       if (veloc == 0) {
+		    if (m->noteoff_callback)
+			 m->noteoff_callback(m->callback_arg, note, veloc);
+	       } else {
+		    if (m->noteon_callback)
+			 m->noteon_callback(m->callback_arg, note, veloc);
+	       }
+	  } else if (ev->type == SND_SEQ_EVENT_NOTEOFF) {
+	       unsigned int note = ev->data.note.note;
+	       unsigned int veloc = ev->data.note.velocity;
+	       if (m->noteoff_callback)
+		    m->noteoff_callback(m->callback_arg, note, veloc);
 	  }
      }
      free(ev);
@@ -80,8 +97,20 @@ void* midiclient_thread(void *m) {
      return NULL;
 }
 
-void midiclient_set_cc_callback(midiclient *m, midiclient_callback_t callback,
-				void *arg) {
-     m->cc_callback = callback;
+void midiclient_set_callback_arg(midiclient *m, void *arg) {
      m->callback_arg = arg;
+}
+
+void midiclient_set_cc_callback(midiclient *m, midiclient_callback_t callback) {
+     m->cc_callback = callback;
+}
+
+void midiclient_set_noteon_callback(midiclient *m,
+				    midiclient_callback_t callback) {
+     m->noteon_callback = callback;
+}
+
+void midiclient_set_noteoff_callback(midiclient *m,
+				     midiclient_callback_t callback) {
+     m->noteoff_callback = callback;
 }

@@ -16,12 +16,16 @@ struct synth_s {
      double amp;
      double ampz;
      double phase;
+     int gate;
+     int note;
 };
 
 synth* synth_create(void);
 void synth_free(synth *s);
 void synth_setfreq(synth *s, double freq);
 void synth_setamp(synth *s, double amp);
+void synth_setnote(synth *s, int note);
+void synth_setgate(synth *s, int gate);
 void synth_process(synth *s, int samplerate, int nframes, float *out);
 
 #endif
